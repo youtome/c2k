@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Cron2Korean Test Cases</title>
+		<link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-git.css" >
+	</head>
+	<body>
+		<h1 id="qunit-header">Cron2Korean Test Cases</h1>
+        <h2 id="qunit-banner"></h2>
+        <ol id="qunit-tests"></ol>
+		<script src="http://code.jquery.com/qunit/qunit-git.js"></script>
+		<script src="../c2k/c2k.js"></script>
+		<script>
+			test("C2K object exist test", function() {
+				ok(!!C2K && typeof C2K == "object");
+			});
+			test("toKorean function exist test", function() {
+				ok(!!C2K.toKorean && typeof C2K.toKorean == "function");
+			});
+			test("Invalid cron expression test", function() {
+				equal(C2K.toKorean("wrong"), "잘못된 크론식");
+				equal(C2K.toKorean("0 0 0 3 * 3 3 3"), "잘못된 크론식");
+				equal(C2K.toKorean("0 0 0 3"), "잘못된 크론식");
+				equal(C2K.toKorean("0 0 0 3 * 3"), "잘못된 크론식");
+				equal(C2K.toKorean("* * * * * *"), "잘못된 크론식");
+			});
+			test("Translate test", function() {
+				equal(C2K.toKorean("0 0 12 * * ?"), "매일 12시 0분 0초");
+				equal(C2K.toKorean("0 15 10 ? * *"), "매일 10시 15분 0초");
+				equal(C2K.toKorean("0 15 10 * * ?"), "매일 10시 15분 0초");
+				equal(C2K.toKorean("0 15 10 * * ? *"), "매일 10시 15분 0초");
+				equal(C2K.toKorean("0 15 10 * * ? 2005"), "2005년 매일 10시 15분 0초");
+				equal(C2K.toKorean("0 * 14 * * ?"), "매일 14시 매분 0초");
+				equal(C2K.toKorean("0 0/5 14 * * ?"), "매일 14시 0,5,10,15,…분 0초");
+				equal(C2K.toKorean("0 0/5 14,18 * * ?"), "매일 14,18시 0,5,10,15,…분 0초");
+				equal(C2K.toKorean("0 0-5 14 * * ?"), "매일 14시 0-5분 0초");
+				equal(C2K.toKorean("0 10,44 14 ? 3 WED"), "3월 수요일 14시 10,44분 0초");
+				equal(C2K.toKorean("0 15 10 ? * MON-FRI"), "매월 월요일-금요일 10시 15분 0초");
+				equal(C2K.toKorean("0 15 10 15 * ?"), "매월 15일 10시 15분 0초");
+				equal(C2K.toKorean("0 15 10 L * ?"), "매월 마지막일 10시 15분 0초");
+				equal(C2K.toKorean("0 15 10 L JAN-JUN ?"), "1-6월 마지막일 10시 15분 0초");
+				equal(C2K.toKorean("0 15 10 ? * 6L"), "매월 마지막 금요일 10시 15분 0초");
+				equal(C2K.toKorean("0 15 10 ? * 6L 2002-2005"), "2002-2005년 매월 마지막 금요일 10시 15분 0초");
+				equal(C2K.toKorean("0 15 10 ? * 6#3"), "매월 세번째 금요일 10시 15분 0초");
+				equal(C2K.toKorean("0 0 12 1/5 * ?"), "매월 1,6,11,16,…일 12시 0분 0초");
+				equal(C2K.toKorean("0 11 11 11 11 ?"), "11월 11일 11시 11분 0초");
+				equal(C2K.toKorean("0 11 11 ? 11 2"), "11월 월요일 11시 11분 0초");
+				equal(C2K.toKorean("0 11 11 LW 11 ?"), "11월 마지막 평일 11시 11분 0초");
+				equal(C2K.toKorean("0 11 11 31W 11 ?"), "11월 31일에서 가장 가까운 평일 11시 11분 0초");
+				equal(C2K.toKorean("* * * * * ?"), "매초");
+				equal(C2K.toKorean("0 0/2 * * * ?"), "매시 0,2,4,6,…분 0초");
+				equal(C2K.toKorean("* 0/2 * * * ?"), "매시 0,2,4,6,…분 매초");
+			});
+		</script>
+	</body>
+</html>
