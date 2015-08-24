@@ -5,7 +5,7 @@
 
 Quartz의 Cron format을 지원합니다.
 
-test/index.html 에서 크론식 번역 문법을 확일할 수 있습니다.
+test/index.html 에서 크론식 번역 문법을 확인할 수 있습니다.
 
 ##사용방법
     <script src="../c2k/c2k.js"></script>
